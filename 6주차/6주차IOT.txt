@@ -1,0 +1,51 @@
+<아두이노 핀 제어>
+
+디지털 출력
+5V on/off -> digitalWrite()
+디지털 입력
+5V on/off -> digitalRead()
+
+아날로그는 수치가 있다/ 수치 값으로 볼륨을 올린다 내린다.
+디지털은 수치가 없다/ on off 껐다 켰다.
+
+라즈베리 파이 피코 -> 파이썬
+아두이노 우노 -> 다른언어
+
+출력은 공통이 맞아야 시리얼 모니터가 나온다
+
+아날로그 핀 제어
+14개 = 13개 센서 사용 가능 RX TX -> 1개
+
+디지털 핀 0~13번 핀 사용가능(UNO 기준)
+
+0V(off, LOW, 0) 5V(on, HIGH, 1) 출력/입력 기능
+*0=off, *1=on -> *"디지털"*
+
+디지털 핀 제어 방법
+디지털 핀 초기화 = pinMode(pinNumber, mode)
+		0 ~ 1 빼고  2 ~ 13 핀넘버
+ // 입력 체크 = digitalRead(pinNumber)
+ // 출력 = digitalWrite(pinNumber, state)
+on, off = 5V, 0V = HIGH, LOW 나오면 디지털
+3.3V도 있는데 RFID카드에 씀
+
+V전압을 잘 보고 넣어줘야한다. (안그럼 고장남)
+
+0,1 번 핀은 특별한 핀 -> Hardware serial Port
+(0 = RX(데이터 받는), 1 = TX(데이터 보내는))
+2~13 디지털 입출력 핀
+3,5,6,9,10,11 -> PWM 출력 Pulse Width Modulation
+10,11,12,13 -> SPI 통신용 핀
+아날로그핀 A0 ~ A5
+0~1023 범위의 값을 읽을 수 있음
+
+A0 ~ A3 디지털 입출력 핀으로도 사용가능
+
+DigitalWrite 예제) 
+LED 버튼 핀 설정 -> pinMode(2, OUTPUT)
+LED on -> digitalWrite(2, HIGH)
+LED off -> digitalRead(2, LOW) 
+LED 꺼졌다 켜졌다
+
+디지털 = 입출력
+

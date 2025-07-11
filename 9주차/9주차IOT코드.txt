@@ -1,0 +1,186 @@
+1. 레이저 코드
+
+int laser = 13;
+
+void setup() {
+  pinMode(laser, OUTPUT);
+}
+
+void loop() {
+  digitalWrite(laser, HIGH);
+  delay(1000);
+  digitalWrite(laser, LOW);
+  delay(1000);
+}
+
+2. 레이저와 자동 타겟 코드 (1)
+#include <Servo.h>
+
+const int trigPin = 9;
+const int echoPin = 10;
+const int laser = 13;
+const int servoPin = 6;
+Servo myServo;
+
+long duration;
+int distance;
+
+void setup() {
+  pinMode(trigPin, OUTPUT);
+  pinMode(echoPin, INPUT);
+  pinMode(laser, OUTPUT);
+  myServo.attach(servoPin);
+  Serial.begin(9600);
+}
+
+void loop() {
+  for (int angle = 0; angle <= 180; angle += 5) {
+    myServo.write(angle);
+    delay(200);
+
+    digitalWrite(trigPin, LOW);
+    delayMicroseconds(2);
+    digitalWrite(trigPin, HIGH);
+    delayMicroseconds(10);
+    digitalWrite(trigPin, LOW);
+
+    duration = pulseIn(echoPin, HIGH);
+    distance = duration * 0.034 / 2;
+
+    Serial.print("Angle: ");
+    Serial.print(angle);
+    Serial.print(" - Distance: ");
+    Serial.println(distance);
+
+    if (distance > 0 && distance < 10) {
+      digitalWrite(laser, HIGH);
+      delay(3000);
+      digitalWrite(laser, LOW);
+    }
+  }
+}
+
+3. 레이저와 자동 목표물 추적 코드
+#include <Servo.h>
+
+const int trigPin = 9;
+const int echoPin = 10;
+const int laser = 13;
+const int servoPin = 6;
+
+Servo myServo;
+
+long duration;
+int distance;
+int currentAngle = 90;
+const int initialAngle = 90;
+bool targetFound = false;
+
+void setup() {
+  pinMode(trigPin, OUTPUT);
+  pinMode(echoPin, INPUT);
+  pinMode(laser, OUTPUT);
+  
+  myServo.attach(servoPin);
+  myServo.write(currentAngle);
+  Serial.begin(9600);
+}
+
+void loop() {
+  if (!targetFound) {
+    int detectedAngle = scanForTarget();
+    if (detectedAngle != -1) {
+      smoothMove(currentAngle, detectedAngle);
+      currentAngle = detectedAngle;
+      targetFound = true;
+      digitalWrite(laser, HIGH);
+      Serial.println("Target acquired. Tracking...");
+    } else {
+      if (currentAngle != initialAngle) {
+        smoothMove(currentAngle, initialAngle);
+        currentAngle = initialAngle;
+      }
+      digitalWrite(laser, LOW);
+      Serial.println("No target found. Scanning...");
+    }
+  } else {
+    int bestAngle = trackTargetAround(currentAngle);
+    if (bestAngle != -1) {
+      smoothMove(currentAngle, bestAngle);
+      currentAngle = bestAngle;
+      digitalWrite(laser, HIGH);
+      Serial.print("Tracking... New angle: ");
+      Serial.println(currentAngle);
+    } else {
+      targetFound = false;
+      digitalWrite(laser, LOW);
+      Serial.println("Lost target. Switching to scan.");
+    }
+  }
+
+  delay(100);
+}
+
+int scanForTarget() {
+  int detectedAngle = -1;
+  int minDistance = 1000;
+
+  for (int angle = 0; angle <= 180; angle += 5) {
+    myServo.write(angle);
+    delay(50);
+
+    int dist = measureDistance();
+    if (dist > 0 && dist < 10 && dist < minDistance) {
+      minDistance = dist;
+      detectedAngle = angle;
+    }
+  }
+  return detectedAngle;
+}
+
+int trackTargetAround(int centerAngle) {
+  int detectedAngle = -1;
+  int minDistance = 1000;
+  int range = 15;
+
+  int startAngle = max(0, centerAngle - range);
+  int endAngle = min(180, centerAngle + range);
+
+  for (int angle = startAngle; angle <= endAngle; angle += 2) {
+    myServo.write(angle);
+    delay(30);
+
+    int dist = measureDistance();
+    if (dist > 0 && dist < 10 && dist < minDistance) {
+      minDistance = dist;
+      detectedAngle = angle;
+    }
+  }
+  return detectedAngle;
+}
+
+int measureDistance() {
+  digitalWrite(trigPin, LOW);
+  delayMicroseconds(2);
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigPin, LOW);
+
+  duration = pulseIn(echoPin, HIGH, 20000);
+  return duration * 0.034 / 2;
+}
+
+void smoothMove(int fromAngle, int toAngle) {
+  if (fromAngle == toAngle) return;
+
+  float angle = fromAngle;
+  float step = 0.5;
+  int delayTime = 15;
+
+  while (abs(angle - toAngle) >= step) {
+    angle += (toAngle > angle) ? step : -step;
+    myServo.write((int)angle);
+    delay(delayTime);
+  }
+  myServo.write(toAngle);
+}
