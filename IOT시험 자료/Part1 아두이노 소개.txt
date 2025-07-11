@@ -1,0 +1,230 @@
+Part1. About Arduino
+
+아두이노 소개
+
+서영배
+
+HardCopyWorld.com
+
+
+
+Contents
+
+01/  아두이노
+
+02/  아두이노의 종류와 특징
+
+03/  아두이노 UNO 보드
+
+04/  아두이노 개발 과정
+
+002
+
+
+
+01
+
+About
+Arduino
+
+아두이노 (Arduino)
+
+# 아두이노란??
+
+- 전기를 제어하는 작은 컴퓨터입니다.
+
+- 가장자리를 따라 난 소켓으로 흐르는 전기를 제어
+
+- 모터 및 센서 제어, 무선 통신, 다양한 전자 장치 제어
+
+003
+
+
+
+01
+
+About
+Arduino
+
+아두이노 (Arduino)
+
+# 단일 보드 마이크로컨트롤러 (=PC와 유사)
+# 2005년 이탈리아에서 시작
+
+# 쉬움
+
+🡺 PC, 아두이노, USB 케이블만 있으면 준비 OK
+# 통합 개발환경을 제공 (아두이노 IDE)
+
+# 오픈 하드웨어
+
+# 방대한 참고자료, 라이브러리
+
+004
+
+
+
+01
+
+About
+Arduino
+
+아두이노의 종류와 특징 (1)
+
+• 정식 아두이노 보드
+
+아두이노 UNO 보드 : 표준 보드 (R3)
+
+아두이노 Nano : UNO의 소형화 버전
+
+아두이노 Mega2560 : UNO의 고성능 버전
+
+아두이노 Pro/Pro mini : UNO 초소형화 버전
+
+(3.3v/5v 버전이 별도로 존재)
+
+005
+
+
+
+01
+
+About
+Arduino
+
+아두이노의 종류와 특징 (2)
+
+• 정식 아두이노 보드
+
+아두이노 Duemilanoves : UNO의 구버전, 현재 단종
+
+아두이노 Leonardo : UNO와 유사, 핀 배열과 개수가 약간 틀림
+아두이노 MegaADK : 안드로이드 ADK 지원보드 (USB Host 기능)
+아두이노 Micro : Leonardo 보드의 소형화 버전
+
+아두이노 Pro micro : Nano와 유사하지만 3.3/5v 별도로 존재
+아두이노 Zero : ARM core, 고성능 버전
+
+아두이노 Tre, Yun : 아두이노 + 리눅스
+
+• 특수 용도 아두이노 보드
+
+Lily Pad : 웨어러블용(의류용) 특화 보드
+아두이노 FIO (Funnel IO) : 무선통신 특화 보드
+
+(Xbee, 배터리 소켓 포함)
+
+006
+
+
+
+01
+
+About
+Arduino
+
+아두이노의 종류와 특징 (3)
+
+• 아두이노 호환 보드
+
+3rd Party 에서 제작한 호환성을 갖춘 Custom 보드들
+
+• 아두이노 쉴드
+
+아두이노 UNO 보드 혹은 기타 보드 위에 층층이 쌓아서 사용 가능한
+기능 확장용 보드들을 지칭 (예. WiFi 쉴드, Ethernet 쉴드)
+
+007
+
+
+
+01
+
+About
+Arduino
+
+아두이노의 종류와 특징 (4)
+
+• 아두이노 및 호환 보드 종류
+
+http://www.hardcopyworld.com/gnuboard5/bbs/board.php?bo_ta
+ble=tech_arduino
+
+• 아두이노 보드 종류 및 선택 가이드
+
+http://www.hardcopyworld.com/gnuboard5/bbs/board.php?bo_ta
+ble=lecture_begin&wr_id=8
+
+008
+
+
+
+01
+
+About
+Arduino
+
+아두이노 UNO 보드
+
+• 아두이노 UNO 보드
+
+
+
+01
+
+About
+Arduino
+
+아두이노 개발 과정
+
+• 아두이노 개발 과정
+
+1. 아두이노와 각종 장치들(LED, 모터, 센서…)을 연결
+
+2. 아두이노 개발환경(IDE)을 실행
+
+3. 소스코드(스케치, sketch) 작성
+
+4. 컴파일 및 업로드
+
+5. 아두이노 동작 확인
+
+6. 디버깅, 3~5 반복
+
+• 아두이노 테스트를 위한 준비물
+
+아두이노 UNO 보드 (혹은 기타 보드)
+
+Starter Kit (LED, 스위치, 각종 센서, 저항, 케이블 등)
+아두이노 개발환경 (IDE)
+
+인두기
+
+0010
+
+
+수고하셨습니다!!
+
+HardCopyWorld.com 서영배
+
+
+HardCopyWorld.com
+
+
+제작/
+사용범위/
+
+서영배
+
+본 문서는 비상업적 목적에 한해 사용, 배포가 가능합니다.
+배포시에는 원본 문서를 확인할 수 있도록 본 페이지의
+내용을 반드시 포함해야 합니다.
+
+홈페이지 http://www.hardcopyworld.com
+
+이메일 godstale@hotmail.com
+
+HardCopyWorld.com 을 통해 본 연재 강좌의 전체 내용
+및 다양한 모듈 정보, 소스를 얻으실 수 있습니다.
+
+

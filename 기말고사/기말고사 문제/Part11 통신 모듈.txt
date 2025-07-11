@@ -1,0 +1,615 @@
+Part11. Comm Module
+
+통신 모듈
+
+
+Contents
+
+01/  통신 모듈의 종류와 특징
+
+02/  블루투스 모듈
+
+03/  블루투스 채팅 예제
+
+04/  RF 채팅 예제
+
+002
+
+
+통신 모듈의 종류와 특징
+
+003
+
+
+
+11
+
+Comm
+Module
+
+통신 모듈의 종류와 특징
+
+• 유선 통신
+
+- USB / USB Host
+
+- PC 또는 모바일 장치와 USB 연결 가능
+
+- USB host shield / OTG cable 이용
+
+- 안정적, 신뢰성 높은 통신 방법
+
+- 사용하기 쉬움
+
+- 1:1 연결
+
+004
+
+
+
+11
+
+Comm
+Module
+
+통신 모듈의 종류와 특징
+
+• 유선 통신
+
+- 이더넷 모듈
+
+- 인터넷 직접 연결 가능
+
+- Server/Client 로 동작
+
+- 공유기에 연결되어 비교적 쉽게 사용가능
+
+- 공간상의 제약
+
+- 마이크로 컨트롤러 성능상의 한계 고려 필요
+
+005
+
+
+
+11
+
+Comm
+Module
+
+통신 모듈의 종류와 특징
+
+• 무선 통신
+
+- 적외선 통신
+
+- 리모컨의 동작 방식
+
+- 신호 생성을 위한 표준이 있으며
+
+- 아두이노 용 표준 라이브러리도 존재
+
+http://www.righto.com/2009/08/multi-protocol-infrared-remote-library.html
+
+- 회로가 간단
+
+- 근접거리, 저용량의 데이터 전송에 적합
+
+- 장애물 등에 취약
+
+006
+
+
+
+11
+
+Comm
+Module
+
+• 무선 통신
+
+- 적외선 통신
+
+- 회로도
+
+007
+
+
+
+11
+
+Comm
+Module
+
+통신 모듈의 종류와 특징
+
+• 무선 통신
+
+- RF 통신
+
+- 200MHz ~2.4GHz 대역의 다양한 무선 통신 방법
+
+- 단순히 데이터만 송수신하는 모듈, 복잡한 프로토콜이 정의된 모듈
+
+- 저속 근거리 통신용으로 적합
+
+- N:N 통신 가능
+
+- NRF24L01 (2.4GHz), HC-11 (433MHz) 등
+
+008
+
+
+
+11
+
+Comm
+Module
+
+통신 모듈의 종류와 특징
+
+• 무선 통신
+
+- Zigbee
+
+- 2.4GHz 대역의 무선 통신 방법
+
+- 복잡한 프로토콜, 부족한 리퍼런스
+
+- 상대적으로 진입 장벽이 높은 통신 방법
+
+- 1:N, N:N 고속 Mesh 네트웍 구성에 유리
+
+- xbee 제품이 대표적
+
+009
+
+
+
+11
+
+Comm
+Module
+
+통신 모듈의 종류와 특징
+
+• 무선 통신
+
+- LoRa (Long Range)
+
+- 비면허 주파수 대역인 ISM 대역 사용 (433, 900MHz)
+
+- 저속, 장거리 통신 (10~20Km)
+
+- 장거리, 저전력 Mesh 네트웍 구성이 가능
+
+- 아두이노용 라이브러리를 이용해 송수신 가능
+
+0010
+
+
+
+11
+
+Comm
+Module
+
+통신 모듈의 종류와 특징
+
+• 무선 통신
+
+- 블루투스
+
+- 근거리 무선통신 (2.4GHz)
+
+- 모바일 장치와 연동에 장점
+
+- 비교적 빠른 속도(Classic BT, v2.x), 저전력(BLE, v4.x)
+
+- 비컨 활용 가능, 1:N 피코넷 구성 가능
+
+- HC-06, HM-10, 아이폰 연결에 제한
+
+0011
+
+
+
+11
+
+Comm
+Module
+
+통신 모듈의 종류와 특징
+
+• 무선 통신
+
+- WiFi
+
+- 근거리 무선통신 (2.4GHz)
+
+- 인터넷 직접 연결 가능
+
+- 무선 AP로 동작 가능 (로컬 네트웍 구성)
+
+- 칩에 TCP/IP/HTTP 기능 구현
+
+- HTTP 서버 구성 가능
+
+- CC3000, ESP8266 등
+
+0012
+
+
+블루투스 모듈
+
+0013
+
+
+
+11
+
+Comm
+Module
+
+블루투스 모듈
+
+• 블루투스 (HC-06) 모듈
+
+- Serial 지원 블루투스 통신 모듈
+
+- Slave/Master/Dual 모듈
+
+- Bluetooth 2.0 지원, 2.4GHz 안테나 내장
+
+- 인터페이스 보드 유무
+
+- 인터페이스 보드가 없는 경우 3.3v 전원 사용
+
+- 인터페이스 보드가 있는 경우 3.3v/5v 선택 가능
+
+- 일반적으로 Software Serial 로 사용
+
+- 아두이노와 TX-RX, RX-TX 크로스 해서 연결
+
+- 모바일 폰과 연동하기위한 최선, 최적의 통신 모듈
+
+- 전원만 넣어도 자체 동작이 가능
+
+- FTDI (USB to UART) 모듈을 이용해서 PC와 연결 후 설정 및 사용가능
+
+0014
+
+
+
+11
+
+Comm
+Module
+
+블루투스 모듈 연결방법
+
+• 아두이노와 연결 방법
+
+Bluetooth HC-06      Arduino
+VCC         3.3V
+
+GND          GND
+
+TX           D2
+
+RX           D3
+
+0015
+
+
+
+11
+
+Comm
+Module
+
+블루투스 모듈 설정 변경
+
+• Echo 예제
+
+- PC와 블루투스 모듈이 통신할 수 있도록 아두이노가 중계
+
+- PC --> 아두이노 --> 블루투스
+
+- 블루투스 --> 아두이노 --> PC
+
+- 각종 통신 모듈 설정 등에 자주 사용되는 코드
+
+0016
+
+
+
+11
+
+Comm
+Module
+
+블루투스 모듈 설정 변경
+
+• 아두이노에 소스코드 업로드
+
+- 예제소스 \ Part11_1_bt_echo
+
+
+라이브러리 include
+
+라이브러리 초기화
+
+#include <SoftwareSerial.h>
+
+SoftwareSerial BTSerial(2, 3); //Connect HC-06. Use your (TX, RX) settings
+void setup() {
+
+Serial.begin(9600);
+Serial.println("Hello!");
+
+BTSerial.begin(9600); // set the data rate for the BT port
+
+
+BT에서 받은 데이터가 있으면
+데이터를 읽어서 PC로 전달
+
+}
+
+void loop() {
+
+// BT –> Data –> Serial
+
+if (BTSerial.available()) {
+
+Serial.write(BTSerial.read());
+
+
+PC에서 받은 데이터가 있으면
+데이터를 읽어서 BT로 전달
+
+}
+
+// Serial –> Data –> BT
+if (Serial.available()) {
+
+BTSerial.write(Serial.read());
+
+}
+
+}
+
+0017
+
+
+
+11
+
+Comm
+Module
+
+블루투스 모듈 설정 변경
+
+• AT command 사용 방법
+
+- Serial Monitor 창에서 command 입력 후 응답을 확인하는 방식
+
+- 블루투스 모듈 초기 설정
+
+Name=????, Password=1234, BAUD RATE=9600
+
+- 블루투스 응답 확인
+
+AT → OK
+
+AT+VERSION → OKLinvorV1.8
+
+- 장치명 변경
+
+AT+NAMExxxx (mybt01 로 변경한다면... AT+NAMEmybt01)
+
+- 페어링 암호 변경
+
+AT+PINxxxx (1234로 변경한다면... AT+PIN1234)
+
+0018
+
+
+11
+
+Comm
+Module
+
+블루투스 채팅 예제
+
+0019
+
+
+
+11
+
+Comm
+Module
+
+블루투스 채팅 예제
+
+• 아두이노 – 안드로이드 채팅 예제
+
+- 아두이노와 안드로이드 폰을 블루투스로 연결
+
+- Serial Monitor ← 아두이노 → 안드로이드 폰
+
+- 앞선 echo 예제를 응용
+
+- 페어링 된 상태에서는 PC 의 데이터가 폰까지 전달됨
+
+Paired
+
+0020
+
+
+
+11
+
+Comm
+Module
+
+블루투스 채팅 예제
+
+• 아두이노와 연결 방법
+
+Bluetooth HC-06      Arduino
+VCC         3.3V
+
+GND          GND
+
+TX           D2
+
+RX           D3
+
+0021
+
+
+
+11
+
+Comm
+Module
+
+블루투스 채팅 예제
+
+• 안드로이드용 실행파일 다운로드
+
+Google Play Store 에서 “BT Chat 아두이노” 검색
+
+[hardcopyworld.com – 자유게시판 – 블루투스 채팅 안드로이드용 실행 파일]
+
+• 테스트 순서
+
+1. 아두이노를 켜서 HC-06 슬레이브 모듈이 페어링 대기상태에 들어가도록
+합니다. (LED 깜빡깜빡)
+
+2. 링크에서 APK 파일을 받아서 폰에 설치합니다.
+
+3. 폰의 설정 > 블루투스 에서 off 상태이면 BT on 으로 바꿉니다.
+
+4. BluetoothChat 앱을 실행 - 메뉴키 - Connect a device 선택
+
+5. Device List 에 HC-06 슬레이브 모듈이 보이는지 확인. 안보이면 Scan
+
+버튼을 눌러서 찾아보고 그래도 안되면 1부터 다시합니다.
+
+6. HC-06 모듈이 보이면 선택 - 연결이 정상적으로 완료되면 챗팅 가능
+
+7.폰으로 글 적으면 PC의 Serial Monitor에서 보이는지 확인합니다. 반대도
+확인.
+
+0022
+
+
+
+11
+
+Comm
+Module
+
+블루투스 채팅 예제
+
+• 활용 예
+
+0023
+
+
+11
+
+Comm
+Module
+
+RF 채팅 예제
+
+0024
+
+
+
+11
+
+Comm
+Module
+
+RF 채팅 예제
+
+• RF 모듈을 이용한 다중 채팅
+
+- 아두이노에 HC-11 RF 모듈을 연결
+
+- Serial Monitor ← 아두이노 → HC-11
+
+- 앞선 echo 예제를 사용
+
+
+Wireless
+
+Wired
+
+0025
+
+
+
+11
+
+Comm
+Module
+
+RF 채팅 예제
+
+• 아두이노와 연결 방법
+
+HC-11         Arduino
+
+VCC          3.3V
+
+GND          GND
+
+TX           D2
+
+RX           D3
+
+0026
+
+
+
+11
+
+Comm
+Module
+
+RF 채팅 예제
+
+• 테스트 순서
+
+1. echo 예제를 아두이노에 업로드
+
+2. PC – 아두이노 IDE – 시리얼 모니터 실행
+
+3. 시리얼 모니터로 글자 전송
+
+🡺 다른 사용자의 PC에 글자가 전송되었는지 확인
+
+4. 시리얼 모니터로 다른 사용자의 글자가 표시되는지 확인
+
+0027
+
+
+
+11
+
+Comm
+Module
+
+RF 채팅 예제
+
+• 활용 예제
+
+0028
+
+

@@ -1,0 +1,1019 @@
+Part10. Display
+
+디스플레이 모듈
+
+
+Contents
+
+01/  캐릭터 LCD
+
+02/  8x8 LED 매트릭스
+
+03/  OLED 디스플레이
+
+002
+
+
+
+10
+
+Display
+
+디스플레이 모듈
+
+• 디스플레이 모듈
+
+- I2C OLED / 8x8 Dot Matrix / Nokia 5110
+
+- RGB LED Strip / 16x2 character LCD / TFT display …
+
+003
+
+
+
+10
+
+Display
+
+디스플레이 모듈
+
+• 동기식 시리얼과 비동기식 시리얼
+
+- 동기식 시리얼
+
+- 데이터 라인을 클럭 라인의 동작과 동기화
+
+- 시리얼 라인에 함께 연결된 기기들이 클럭을 공유
+
+- 비동기식 시리얼
+
+- 외부 클럭 시그널의 도움 없이 동작
+
+- 데이터 전송 속도(Baudrate) 고정
+
+
+Parallel
+
+Serial
+
+Synchronous
+
+I2C
+SPI
+
+Asynchronous     Serial (UART)
+
+004
+
+
+10
+
+Display
+
+16x2 Character LCD
+
+005
+
+
+
+10
+
+Display
+
+16x2 Character LCD
+
+• Character LCD
+
+- 아스키 문자 또는 간단한 도형 표시 가능
+
+- 16x2 / 20x4
+
+- 백라이트 on/off 가능
+
+- 백팩 모듈을 이용해 I2C로 간단하게 제어 가능
+
+- 전용 라이브러리 사용
+
+006
+
+
+
+10
+
+Display
+
+16x2 Character LCD
+
+• 목표
+
+- 아두이노 시작할 때 메시지 출력
+
+- Serial Monitor로 메시지를 입력 받아
+
+- LCD로 출력
+
+• 준비물
+
+- LCD, 연결선
+
+• 라이브러리
+
+- LiquidCrystal_I2C 라이브러리 사전 설치 필요!!
+
+007
+
+
+
+10
+
+Display
+
+16x2 Character LCD
+
+
+• 회로 연결 (No I2C backboard)
+
+[LCD 핀번호]     [ 브레드보드]     [ 아두이노 ]
+
+1. Vss  ------------------- GND(청색)      GND
+
+2. Vdd  ------------------- VCC(적색)      V
+
+3. V0       GND(청색, 가변저항으로 연결)
+
+예제 :
+
+메뉴 – 파일 – 예제 - LiquidCrystal
+
+
+4. RS
+
+5. RW       GND(청색)
+
+6. E
+
+7. DB0 (사용 안함)
+
+8. DB1(사용 안함)
+
+9. DB2(사용 안함)
+
+10. DB3(사용 안함)
+
+11 DB4
+
+12 DB5
+
+13 DB6
+
+14 DB7
+
+15 LEDA      VCC(적색)
+
+16 LEDK      GND(청색)
+
+D13
+
+D12
+
+D11
+D10
+D9
+D8
+
+008
+
+
+
+10
+
+Display
+
+16x2 Character LCD
+
+• 회로 연결 (With I2C backboard)
+
+• VCC 🡺 5V
+
+• GND 🡺 GND
+
+• SDA 🡺 A4
+
+• SCL 🡺 A5
+
+• 점퍼 : 백라이트 on/off
+
+• 가변저항 : contrast 조절
+
+• 예제 파일
+
+- display_16x2
+
+009
+
+
+
+10
+
+Display
+
+16x2 Character LCD
+
+
+LCD 클래스 변수
+LCD 초기화
+아이콘
+
+아이콘 등록
+
+문자열 출력
+커서 위치 설정
+아이콘 출력
+
+#include <LiquidCrystal_I2C.h>
+
+……
+
+LiquidCrystal_I2C lcd(0x27,16, 2); // set the LCD address to 0x20 for a 16 chars and 2 line display
+uint8_t bell[8] = {0x4,0xe,0xe,0xe,0x1f,0x0,0x4};
+
+uint8_t note[8] = {0x2,0x3,0x2,0xe,0x1e,0xc,0x0};
+
+…...
+
+void setup() {
+Serial.begin(9600);
+
+lcd.init();   // initialize the lcd
+lcd.backlight();
+
+lcd.createChar(0, bell); // register icon
+lcd.createChar(1, note);
+
+……
+lcd.home();
+
+lcd.print("Hello world...");
+
+lcd.setCursor(0, 1); // move cursor to (column, line)
+lcd.print(" I ");
+
+lcd.printByte(3); // display icon
+lcd.print(" arduinos!");
+delay(1000);
+
+}
+
+
+void loop() {
+
+……
+
+}
+
+0010
+
+
+
+10
+
+Display
+
+16x2 Character LCD
+
+#include <LiquidCrystal_I2C.h>
+
+……
+
+LiquidCrystal_I2C lcd(0x27,16, 2); // set the LCD address to 0x20 for a 16 chars and 2 line display
+
+void setup() {
+Serial.begin(9600);
+
+……
+
+
+Serial 통신 초기화
+
+}
+
+void loop()
+
+{
+
+
+Serial 통신 버퍼 확인
+
+LCD 화면 지움
+
+시리얼 버퍼에서
+1byte 읽은 뒤
+LCD로 출력
+
+// when characters arrive over the serial port...
+if (Serial.available()) {
+
+// wait a bit for the entire message to arrive
+delay(100);
+
+// clear the screen
+lcd.clear();
+
+// read all the available characters
+while (Serial.available() > 0) {
+
+// display each character to the LCD
+lcd.write(Serial.read());
+
+}
+
+}
+
+}
+
+0011
+
+
+
+10
+
+Display
+
+16x2 Character LCD
+
+• 활용
+
+- 센서들을 아두이노에 연결해서
+
+- 센서의 값을 LCD로 출력해보세요!!
+
+0012
+
+
+10
+
+Display
+
+8x8 LED Matrix
+
+0013
+
+
+
+10
+
+Display
+
+8x8 LED Matrix
+
+• 8x8 LED Matrix
+
+- 상점의 광고용 LED 디스플레이로 사용되는 것과 유사
+
+- 8x8 = 64 개의 LED
+
+- 여러 개를 이어서 사용가능
+
+- MAX7219 드라이버 칩
+
+- 전용 라이브러리 사용
+
+- 변형된 SPI 통신 사용
+
+0014
+
+
+
+10
+
+Display
+
+8x8 LED Matrix
+
+• 8x8 LED Matrix – LED 배열 구조
+
+- 세로 (Column) : 0 ~ 7
+
+- 가로 (Row) : 0 ~ 7
+
+- Row, Column번호로 각 LED를 on/off 가능
+
+0015
+
+
+
+10
+
+Display
+
+8x8 LED Matrix
+
+• 목표
+
+- LED 매트릭스의 다양한 동작 예제 실습
+
+• 준비물
+
+- LED Matrix 모듈, 연결선, 아두이노
+
+• 라이브러리
+
+- 라이브러리 사전 설치 필요!!
+
+https://github.com/shaai/Arduino_LED_matrix_sketch
+
+0016
+
+
+
+10
+
+Display
+
+8x8 LED Matrix
+
+• 회로 연결
+
+
+8x8 LED 매트릭스
+
+VCC
+GND
+DIN
+CS
+CLK
+
+아두이노
+
+5V
+GND
+
+D12 (MOSI)
+D10 (SS)
+D11 (SCK)
+
+0017
+
+
+
+10
+
+Display
+
+8x8 LED Matrix
+
+
+#define NBR_MTX 1
+
+LedControl lc=LedControl(12,11,10, NBR_MTX);
+
+void setup() {
+stringCounter=0;
+
+for (int i=0; i< NBR_MTX; i++){ // 초기화
+
+lc.shutdown(i,false);
+
+lc.setIntensity(i,1);  /* Set the brightness to a medium values */
+lc.clearDisplay(i);   /* and clear the display */
+
+
+String displayChar = "1234567890abcdefghijklmnopqrstuvwxyz";
+
+int stringCounter=0;
+
+/* we always wait a bit between updates of the display */
+unsigned long delaytime=300;
+
+byte iconHeart[8]={
+
+B00100100,
+B01011010,
+B10000001,
+B10000001,
+B01000010,
+B00100100,
+B00011000,
+B00000000};
+
+}
+
+// LED 1개씩 제어
+
+// setLed(int addr, int row, int col, boolean state)
+lc.setLed(0,0,0,true); // 0번 모듈, (0, 0) on
+delay(1000);
+
+......
+
+// 행(세로) LED 8개 제어
+lc.setRow(0,1,0x0C); // 0번 모듈, 1 행
+delay(1000);
+
+......
+
+// 열(가로) LED 8개 제어 ④
+lc.setColumn(0,7,iconHeart[0]);
+delay(1000);
+
+......
+
+// 문자열 출력 ⑤
+
+lc.writeString(0,"Hola Mundo");
+
+......
+
+// 문자 스크롤 ⑥
+
+scrollLeft('O');
+
+......
+
+}
+
+0018
+
+
+
+10
+
+Display
+
+8x8 LED Matrix
+
+void loop() {
+
+char ch= displayChar[stringCounter];
+stringCounter++;
+
+if (stringCounter>35) stringCounter=0;
+lc.displayChar(0, lc.getCharArrayPosition(ch)); // ⑦
+delay(3000);
+
+lc.clearAll();
+delay(200);
+
+}
+
+0019
+
+
+
+10
+
+Display
+
+8x8 LED Matrix
+
+• 활용
+
+- 여러 개의 LED 매트릭스를 이어 전광판을 만들어 보세요!
+
+0020
+
+
+10
+
+Display
+
+OLED display
+
+0021
+
+
+
+10
+
+Display
+
+OLED display
+
+• OLED Display (SSD1306)
+
+- 아두이노와 함께 사용할 수 있는 소형 디스플레이
+
+- 0.96’’, 1.3’’, 2.42''
+
+- 저전력, 비교적 고해상도 (128x32, 128x64)
+
+- 이미지 출력 가능
+
+- 단색 display (1bit bitmap)
+
+- I2C / SPI / Serial interface
+
+- SSD1306 driver chipset (or SH1106)
+
+🡨 MicroView
+
+0022
+
+
+
+10
+
+Display
+
+OLED display 의 문제점
+
+• 통신 인터페이스
+
+- I2C / SPI / Serial 에 따라 연결 방법 및 소스코드가 변경됨
+
+- 여기서는 I2C/SPI 디스플레이 기준
+
+• 메모리 문제
+
+- 그래픽 라이브러리는 내부에 상당한 버퍼를 사용
+
+- 디스플레이 + I2C/SPI + Software Serial 사용할 경우 메모리 부족
+
+- UNO 보드 램이 단 2KB !!
+
+• 라이브러리 문제
+
+- 사용하는 칩셋에 따라 라이브러리가 틀림
+
+- 여기서는 Adafruit GFX, Adafruit SSD1306 / U8glib 사용
+
+- 참고자료 :
+
+http://www.hardcopyworld.com/gnuboard5/bbs/board.php?bo_table=tech_etc&wr_id=1
+
+0023
+
+
+
+10
+
+Display
+
+Drawing 방식
+
+• 그래픽 버퍼
+
+▪ OLED 모듈에서 현재 Drawing 상태를 읽어올 수 없음
+
+▪ 화면의 한 점만을 변경하기 위해 OLED 모듈에 요청할 수 없음
+
+(주변의 픽셀을 같이 변경해야 함)
+
+▪ 그래서 그래픽 버퍼를 사용
+
+• 화면 전체 백업 (Adafruit)
+
+▪ 128x64 에 해당하는 그래픽 버퍼를 생성해서 사용
+
+▪ 화면 갱신이 빠르고 부분 업데이트가 용이
+
+▪ Processing power 적게 소비, 램 과다 소비
+
+• 화면 분할 (u8glib)
+
+▪ 화면을 분할해서 그래픽 버퍼를 작게 유지
+
+▪ 분할 된 개수 만큼 drawing 반복해야 함, 화면 일부만 갱신 불가
+
+▪ 램을 작게 소비, Processing power를 과다 소비
+
+0024
+
+
+
+10
+
+Display
+
+연결 방법
+
+• I2C 기준
+
+-SDA 🡺 A4
+
+-SCL  A5
+
+-VCC 🡺 5V
+
+-GND 🡺 GND
+
+-RST 🡺 D9 (5pin 일 때)
+
+0025
+
+
+
+10
+
+Display
+
+연결 방법
+
+• SPI (7pin out) 기준
+
+•D1 🡺 D11 (MOSI)   DC – D8 (Data Command)
+
+•D0 🡺 D13 (SCK)   CS – D10 (Chip Select)
+
+•RES – D9 (Reset)
+
+•VCC 🡺 5V      GND 🡺 ☝ 🕱👎
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+0026
+
+
+
+10
+
+Display
+
+라이브러리 설치
+
+• Adafruit 라이브러리 설치
+
+- 예제소스 \ 라이브러리 \ Adafruit_GFX, Adafruit_SSD1306
+
+- 예제소스 \ 라이브러리 \ U8glib
+
+• 설치방법
+
+1. 아두이노 설치폴더 \ libraries \
+
+2. 위에서 복사한 폴더를 붙여넣기
+
+3. 아두이노 개발환경 재실행
+
+4. 파일 – 예제 – Adafruit_SSD1306, U8glib 라이브러리에서
+
+ssd1306_128x64_i2c, GraphicTest 예제를 실행
+
+0027
+
+
+
+10
+
+Display
+
+OLED 동작 실습
+
+•소스코드 (Adafruit I2C)
+
+- ssd1306_128x64_i2c (아두이노 IDE > 파일 > 예제 > Adafruit SSD1306)
+
+
+라이브러리 include
+
+라이브러리 초기화
+
+디스플레이 연결 (I2C 주소 확인!!)
+
+로고 스크린 출력
+화면 지움
+
+기타 점, 선, 원, 면, 글자, 이미지
+출력
+
+#include <SPI.h>
+#include <Wire.h>
+
+#include <Adafruit_GFX.h>
+#include <Adafruit_SSD1306.h>
+#define OLED_RESET 4
+
+Adafruit_SSD1306 display(OLED_RESET);
+
+void setup() {
+
+display.begin(SSD1306_SWITCHCAPVCC, 0x3D); // WARNING !!!
+
+display.display(); // Show logo
+display.clearDisplay();
+
+……
+
+……
+
+……
+
+}
+
+void loop() {
+
+}
+
+0028
+
+
+
+10
+
+Display
+
+OLED 동작 실습
+
+•소스코드 (Adafruit SPI)
+
+• - 예제소스 \ Part10_OLED디스플레이 \ ssd1306_128x64_spi
+
+
+라이브러리 include
+
+라이브러리 초기화
+
+디스플레이 연결
+로그 스크린 출력
+화면 지움
+
+기타 점, 선, 원, 면, 글자,
+이미지 출력
+
+// If using software SPI (the default case):
+
+#define OLED_MOSI 11 // D1
+#define OLED_CLK 13 // D0
+#define OLED_DC 8 // DC
+#define OLED_CS 10 // CS
+#define OLED_RESET 9 // RES
+
+Adafruit_SSD1306 display(OLED_MOSI, OLED_CLK, OLED_DC, OLED_RESET,
+OLED_CS);
+
+void setup() {
+
+display.begin(SSD1306_SWITCHCAPVCC); // WARNING !!!
+
+display.display(); // Show logo
+display.clearDisplay();
+
+……
+
+}
+
+void loop() {
+
+}
+
+0029
+
+
+
+10
+
+Display
+
+OLED 동작 실습
+
+•소스코드 (u8glib)
+
+• 예제소스 \ Part10_OLED디스플레이 \ GraphicsTest
+
+•(아두이노 IDE > 파일 > 예제 > u8glib)
+
+
+라이브러리 include
+
+라이브러리 초기화
+
+#include "U8glib.h"
+
+......
+
+//U8GLIB_SSD1306_128X64 u8g(13, 11, 10, 8);
+
+……
+
+U8GLIB_SSD1306_128X64 u8g(U8G_I2C_OPT_NONE|U8G_I2C_OPT_DEV_0);
+
+......
+
+void setup(void) {
+pinMode(9, OUTPUT);
+
+digitalWrite(9, HIGH);
+
+Reset 핀 – HIGH로 설정       }
+
+
+화면이 분할된 수만큼
+
+Draw() 반복
+
+void loop(void) {
+
+// picture loop
+u8g.firstPage();
+do {
+
+draw();  // 실제 화면에 그리는 작업을 실행할 함수
+
+} while( u8g.nextPage() );
+
+......
+
+}
+
+0030
+
+
+
+10
+
+Display
+
+심화 학습
+
+• Adafruit 그래픽 라이브러리 사용시 주의사항
+
+• 칩셋용 라이브러리 + Drawing 용 라이브러리
+
+• 아두이노 버전, 개발환경에 따라 문제가 발생할 수 있음.
+
+• 주요 발생 문제
+
+• Robot_xxx 라이브러리와 충돌 문제 (Adafruit)
+
+Robot_xxx 라이브러리를 삭제
+
+• SPI 관련 에러 (Adafruit)
+
+#include <SPI.h> 또는 라이브러리에서 SPI 관련 코드 삭제
+
+• PROGMEM 문제
+
+아두이노 개발환경(IDE) 버전을 바꿔서 재설치
+
+• 화면에 반응이 없는 문제
+
+I2C 핀 연결 확인, I2C address (0x3C, 0x3D) 확인
+디스플레이가 Adafruit library 지원하는지 확인
+디스플레이가 I2C 통신을 지원하는지 확인
+
+0031
+
+
+
+10
+
+Display
+
+심화 학습
+
+• 이미지를 그릴 때...
+
+- 1 bit - bitmap 사용
+
+- 화면 전체를 채우는 이미지 파일
+
+128 (16 byte) x 64 = 1024 byte = 1Kbyte
+
+- 아두이노의 램은 단 2KB !!!
+
+• RAM 부족을 회피하는 방법
+
+- 아두이노의 RAM 종류
+
+Flash memory(32KB), SRAM(2KB), EEPROM(1KB)
+
+- PROGMEM
+
+Read-only 데이터를 Flash 메모리에 저장한 다음 RAM 대신 Flash
+
+메모리에서 읽어오게 해주는 키워드
+
+- Adafruit GFX 라이브러리를 이용해 출력할 이미지는 모두 PROGMEM 사용
+
+
+- 참고 :
+
+http://www.hardcopyworld.com/gnuboard5/bbs/board.php?bo_table=lecture_pract&wr_id=14
+
+0032
+
+
+수고하셨습니다!!
+
+HardCopyWorld.com 서영배
+
+
+HardCopyWorld.com
+
+

@@ -1,0 +1,832 @@
+Part9. Communication
+
+Contents
+
+01/  아두이노-모듈간 통신 방법
+
+02/  기본 통신 응용
+
+02/  Serial
+
+03/  I2C
+
+04/  SPI
+
+002
+
+
+
+9
+
+Communic
+ation
+
+아두이노-모듈 간 통신 방법
+
+• 패러럴(Parallel)과 시리얼
+
+- 시리얼은 직렬화를 거쳐 한 라인으로 통신
+
+- 패러럴에 비해 저속이지만 통신 라인을 절약
+
+003
+
+
+
+02
+
+Serial
+Comm
+
+아두이노-모듈 간 통신 방법
+
+• 동기식과 비동기식
+
+- 동기식 : Clock 라인을 이용해 데이터 전송 타이밍을 맞춤 (synchronous)
+
+🡺 I2C, SPI 통신이 대표적
+
+- 비동기식 : Clock 라인 없이 양측이 미리 합의된 클럭 사용 (asynchronous)
+
+🡺 Serial(UART) 통신이 대표적
+
+비동기식             동기식
+
+004
+
+
+
+9
+
+Communic
+ation
+
+아두이노-모듈 간 통신 방법
+
+• 아두이노 통신 분류
+
+
+Parallel
+
+Serial
+
+Synchronous
+
+I2C
+SP
+
+Asynchronous     Serial (UART)
+
+005
+
+
+9
+
+Basic
+Sensor
+
+기본 통신 방법
+
+006
+
+
+
+9
+
+Communic
+ation
+
+기본 통신 방법
+
+• 기본 통신 방법
+
+- 아두이노의 디지털 핀을 이용해 전기적 신호로 데이터 송수신
+
+- 1:1 통신
+
+- 모르스 기호 (전보)
+
+- 가장 간단한 형태의 시리얼 통신
+
+- 온습도 센서
+
+007
+
+
+
+9
+
+Communic
+ation
+
+기본 통신 방법
+
+• 기본 통신 방법 – 온습도 센서
+
+- 온도와 습도 데이터를 주기적으로 전송
+
+- 아두이노 디지털 핀을 이용해 수신
+
+- 온도 범위 0~50°C ± 2 °C
+
+- 습도 범위 20~90% RH ± 5%
+
+008
+
+
+
+9
+
+Communic
+ation
+
+기본 통신 방법
+
+• 기본 통신 방법 – 온습도 센서
+
+- 연결방법
+
+009
+
+
+
+9
+
+Communic
+ation
+
+기본 통신 방법
+
+• 기본 통신 방법 – 온습도 센서
+
+- 데이터를 읽기 위해 라이브러리 사용
+
+- https://codebender.cc/library/DHT11#DHT11.cpp
+
+- DHT11 라이브러리 설치
+
+0010
+
+
+
+9
+
+Communic
+ation
+
+기본 통신 방법
+
+#include <DHT11.h>
+
+int pin=2; // 연결한 아두이노 디지털 핀 번호
+
+DHT11 dht11(pin);
+
+
+DHT11 라이브러리 초기화
+시리얼 통신 초기화
+
+온도 측정
+결과 출력
+
+void setup() {
+Serial.begin(9600);
+
+}
+
+void loop() {
+int err;
+
+float temp, humi;
+if((err=dht11.read(humi, temp))==0) {
+
+Serial.print("temperature:");
+Serial.print(temp);
+Serial.print(" humidity:");
+Serial.println(humi);
+
+} else {
+
+Serial.print("Error No :");
+Serial.println(err);
+
+}
+
+delay(DHT11_RETRY_DELAY); //delay for reread
+
+}
+
+0011
+
+
+9
+
+Communic
+ation
+
+Serial (UART) 통신
+
+0012
+
+
+
+9
+
+Communic
+ation
+
+Serial (UART)
+
+• Hardware Serial
+
+- 아두이노 시리얼 통신이 대표적
+
+- 2개의 통신 라인이 크로스 되어 연결 (RX, TX)
+
+- 비동기식 : Clock 라인 없이 양측이 미리 합의된 클럭 사용
+
+🡺 두 장치의 클럭 간격을 미리 맞춰줘야 함 (baud rate)
+
+- 클럭 동기화 문제
+
+🡺 두 장치가 사용하는 클럭 생성기(crystal)의 주파수가 틀린 경우
+
+🡺 문제 방지를 위해 start/stop 비트 추가
+
+- Baudrate(통신속도 BPS), Start/Stop bit, Parity bit, Data chunk
+
+9600 8N1 🡺 9600 bps, 8bit data, No parity, 1 stop bit
+
+O            K
+
+0013
+
+
+
+9
+
+Communic
+ation
+
+Serial (UART)
+
+• Hardware Serial (UART)
+
+- start/stop 비트로 인한 오버헤드 발생
+
+- 하드웨어 구성이 복잡해짐 (UART)
+
+- Serial(UART) 통신은 1:1 연결만 지원
+
+- 시리얼(UART) 통신을 Software로 구현
+
+🡺 SoftwareSerial
+
+0014
+
+
+
+9
+
+Communic
+ation
+
+Serial (UART)
+
+• Hardware Serial
+
+- 아두이노의 기본 통신 방법, 1:1 통신
+
+- TX, RX 핀을 사용
+
+- PC 와의 통신에 이용
+
+(동작 전압이 틀려서 변환칩 필요, FTDI, USB to UART 모듈)
+
+- 아두이노간 Serial 통신이 가능
+
+- 블루투스 모듈, WiFi 모듈 등 광범위하게 사용
+
+- 일반적으로 TX-RX, RX-TX 크로스 해서 연결
+
+• 아두이노의 Serial 통신 핀
+
+- UNO 보드 계열 : D0 (RX), D1 (TX)
+
+- Mega 보드 : 4개의 Serial 지원
+
+- 특별한 라이브러리 없이 Serial.xxx() 함수로 사용 가능
+
+- 표준 스트림 클래스를 상속하므로 read(), write(), print() 등의 함수명을
+사용
+
+0015
+
+
+
+9
+
+Communic
+ation
+
+Serial (UART)
+
+• Software Serial
+
+- Built-in 된 0, 1 번 핀 외에 다른 디지털 핀으로 Serial 통신
+
+- Software (Library)로 serial 통신을 지원
+
+- 최신 아두이노 개발환경에서 기본 내장
+
+- Hardware serial 은 소스코드 업로드, 디버깅의 목적으로 사용되는 경우가
+많으므로 일반적인 serial 모듈들은 이 방법을 사용
+
+• 사용시 주의 사항
+
+- Software Serial 버전에 따라 2개 이상의 인스턴스 지원에 문제가 있을
+가능성이 있음
+
+- Timer 및 일부 라이브러리와의 충동 가능성이 있음.
+
+- 구형 라이브러리에서 인터럽트 핀을 사용해야 하는 경우도 있음
+
+- 라이브러리가 RAM을 150~200 byte 정도 잡아먹음
+
+0016
+
+
+
+9
+
+Communic
+ation
+
+Serial (UART)
+
+• 시리얼 통신 테스트
+
+- LED를 PC에서 시리얼 통신으로 제어
+
+- 연결 방법
+
+0017
+
+
+
+9
+
+Communic
+ation
+
+Serial (UART)
+
+int led1 = LOW; int led2 = LOW; int led3 = LOW;
+void setup() {
+
+Serial.begin(9600);
+
+pinMode(4, OUTPUT); pinMode(5, OUTPUT); pinMode(6, OUTPUT);
+
+
+시리얼 통신, 핀 초기화
+시리얼 통신 버퍼 확인
+1byte 데이터 읽기
+데이터에 따라 처리
+
+}
+
+void loop() {
+if(Serial.available()) {
+
+char received = Serial.read();
+if(received == '1') {
+
+led1 = !led1;
+digitalWrite(4, led1);
+Serial.print("LED 1 = ");
+Serial.println(led1);
+
+} else if(received == '2') {
+
+…
+
+} else if(received == '3') {
+
+…
+
+}
+
+}
+
+}
+
+0018
+
+
+9
+
+Communic
+ation
+
+I2C 통신
+
+0019
+
+
+
+9
+
+Communic
+ation
+
+I2C (Inter-Integrated Circuit)
+
+• I2C, I2C, TWI
+
+- 대표적인 동기식 시리얼 통신
+
+- 클럭 핀과 데이터 핀이 서로 연결 (SCL, SDA)
+
+- 1:N 통신 (Master-Slave 구조, 제한적 N:N)
+
+- 연결이 간단, 데이터 1 라인으로 양방향 통신을 하므로 상대적으로 느림
+
+0020
+
+
+
+9
+
+Communic
+ation
+
+I2C (Inter-Integrated Circuit)
+
+• 아두이노의 I2C
+
+- 아두이노가 Master, 다른 기기가 Slave
+
+- Slave 기기들은 고유의 식별 ID(address)를 가짐
+
+- SCL (Serial Clock, 클럭 시그널), SDA (Serial Data, 데이터 전송)
+
+- 가속도/자이로 센서, 디스플레이 모듈 등
+
+• 아두이노의 I2C 통신 핀
+
+- UNO 보드 계열 : A4 (SDA), A5 (SCL)
+
+- Wire 라이브러리로 사용 (최신 아두이노 IDE에서 지원)
+
+- 표준 스트림 클래스를 상속하므로 read(), write(), print() 등의 함수명을
+사용
+
+0021
+
+
+
+9
+
+Communic
+ation
+
+I2C (Inter-Integrated Circuit)
+
+• I2C 통신 (통신 구조)
+
+- 메시지 기본 구조
+
+주소(address) 프레임과 데이터(data) 프레임 사용
+
+- 통신 시작 조건
+
+SCL(HIGH) 🡪 SDA(HIGH to LOW)
+
+- 주소 프레임
+
+통신 시작되면 주소 프레임부터 전송
+수신할 slave 주소를 표현
+
+1bit read/write 표현
+
+마지막 1bit 로 NACK/ACK 표현 (주소에 해당하는 슬레이브 응답)
+
+0022
+
+
+
+9
+
+Communic
+ation
+
+I2C (Inter-Integrated Circuit)
+
+• 가속도-자이로 센서 모듈 (GY521, MPU-6050)
+
+- 움직임 추적, 자세 제어용
+
+- 각 축에 대해 -16383 ~ +16383 사이의 값을 출력
+
+(16bit data output)
+
+- 6 DOF(Degree Of Freedom), 6축
+
+- I2C 통신
+
+- 3.3v ~ 5v
+
+0023
+
+
+
+9
+
+Communic
+ation
+
+I2C (Inter-Integrated Circuit)
+
+• 가속도-자이로 센서 모듈
+
+- 가속도 센서(accelerometer)
+
+센서에 작용하는 중력 가속도를 X, Y, Z 축 3개 벡터로 나누어 크기를 측정
+
+진동과 외력(이동)에 측정값이 왜곡
+
+원래 자세로 돌아오면 이전 측정값과 똑같은 값으로 복귀
+
+- 자이로 센서(gyro)
+
+센서의 회전이 발생하면 XYZ축의 각속도 변화량을 측정
+각속도 → 각도(위치) 변환을 위해 적분이 필요
+적분과정에서 센서 노이즈가 적분되어 누적오차가 커짐
+실제 움직임과 비슷하게 측정
+
+- 가속도 + 자이로 센서
+
+두 센서의 장점을 합쳐서 결과값 보정 (가속도 센서의 오차, 자이로 센서의 정확도)
+
+
+- 가속도+자이로 센서로 포착할 수 없는 움직임 (Z축을 중심으로 한 회전)
+
+==> 지자기 센서가 필요
+
+0024
+
+
+
+9
+
+Communic
+ation
+
+I2C (Inter-Integrated Circuit)
+
+• I2C 통신 테스트
+
+- 가속도/자이로 센서 테스트
+
+- 연결 방법
+
+0025
+
+
+
+9
+
+Communic
+ation
+
+I2C (Inter-Integrated Circuit)
+
+
+#include "MPU6050.h"
+
+MPU6050 mpu6050;
+
+void loop() {
+
+accel_t_gyro_union accel_t_gyro;
+curSensoredTime = millis();
+
+// 250ms 간격으로 센서 읽기
+
+#define SENSOR_READ_INTERVAL 250 // 센서 읽는 간격if(curSensoredTime - prevSensoredTime > 
+SENSOR_READ_INTERVAL) {
+
+
+unsigned long prevSensoredTime = 0;
+unsigned long curSensoredTime = 0;
+
+mpu6050.readFromSensor(accel_t_gyro); // Read from sensor
+prevSensoredTime = curSensoredTime;
+
+
+void setup() {
+Serial.begin(9600);
+mpu6050.begin();
+
+}
+
+// Print raw accel, gyro values
+Serial.print(F("accel x,y,z = "));
+Serial.print(accel_t_gyro.value.x_accel, DEC);
+Serial.print(F(", "));
+Serial.print(accel_t_gyro.value.y_accel, DEC);
+Serial.print(F(", "));
+Serial.print(accel_t_gyro.value.z_accel, DEC);
+Serial.println(F(""));
+
+……
+
+}
+
+}
+
+0026
+
+
+9
+
+Communic
+ation
+
+SPI 통신
+
+0027
+
+
+
+9
+
+Communic
+ation
+
+SPI (Serial Peripheral Interface)
+
+• SPI
+
+- 고속 1:N 통신을 위한 프로토콜
+
+- Input, Output 통신선이 분리되어 있어 빠름
+
+- Master – Slave 구조
+
+0028
+
+
+
+9
+
+Communic
+ation
+
+SPI (Serial Peripheral Interface)
+
+• SPI 통신 핀 구조
+
+- MISO (Master In Slave Out) – 마스터로 데이터 전송하는 핀
+
+- MOSI (Master Out Slave In) – 마스터에서 디바이스로 전송
+
+- SCK (Serial Clock) – 데이터 전송의 동기화를 맞추기 위해 마스터가
+생성하는 clock pulse
+
+- SS (Slave Select) – 마스터가 특정 디바이스를 활성화/비활성화 하기 위해
+사용되는 디바이스 상의 핀
+
+• 아두이노의 SPI 통신 핀
+
+- UNO 보드 계열 : MOSI(D11), MISO(D12), SCK(D13), SS(D10, slave)
+
+- SPI 라이브러리로 사용
+
+0029
+
+
+
+9
+
+Communic
+ation
+
+SPI (Serial Peripheral Interface)
+
+• SPI 통신 (데이터 송신)
+
+- 클럭 라인을 이용해서 비동기식 시리얼 통신의 문제점 해결
+
+- 클럭 라인의 동작에 맞춰 데이터 라인 동작
+
+- rising (low to high) 또는 falling (high to low) 신호
+
+- 클럭 생성 : 한 장치에서만 (Master – 아두이노)
+
+- 클럭 라인은 SCK(Serial Clock)로 표시
+
+- 마스터 🡪 슬레이브 데이터 전송은 MOSI (Master Out Slave In) 라인
+
+0030
+
+
+
+9
+
+Communic
+ation
+
+SPI (Serial Peripheral Interface)
+
+• SPI 통신 (데이터 수신)
+
+- 슬레이브(slave) 장치가 데이터를 보내는 방법 필요
+
+- 마스터에서 슬레이브 장치를 위한 클럭을 생성해서 보내줌
+
+- 슬레이브 🡪 마스터 전송은 MISO (Master In Slave Out) 라인 사용
+
+0031
+
+
+
+9
+
+Communic
+ation
+
+SPI (Serial Peripheral Interface)
+
+• SPI 통신 (슬레이브 장치 선택, Slave Select)
+
+- SPI 는 1:N 통신이 가능
+
+- 마스터에서 보내는 데이터를 받을 장치 선택 방법이 필요
+
+- 별도의 라인을 추가로 사용. SS(Slave Select)
+
+- 장치마다 SS 라인을 추가해야 함
+
+0032
+
+
+
+9
+
+Communic
+ation
+
+SPI (Serial Peripheral Interface)
+
+• SPI 통신 예제 – 이더넷 모듈
+
+- 이더넷 통신을 위한 모듈
+
+- 칩셋에 HTTP/TCP/IP 프로토콜 구현
+
+- SPI 통신으로 아두이노에서 제어 가능
+
+- HTTP 서버, 클라이언트로 설정 가능
+
+- EtherCard 라이브러리 설치 필요
+
+https://github.com/jcw/ethercard
+
+0033
+
+
+
+9
+
+Communic
+ation
+
+SPI (Serial Peripheral Interface)
+
+• SPI 통신 예제 – 이더넷 모듈
+
+- 연결 방법
+
+0034
+
+
+
+9
+
+Communic
+ation
+
+SPI (Serial Peripheral Interface)
+
+• SPI 통신 예제 – 이더넷 모듈
+
+- 예제 : Part9_4_SPI_Ethernet 참고
+
+🡺 모듈 초기화 , DHCP – IP 설정 이후 HTTP request 예제
+
+0035
+
+
+

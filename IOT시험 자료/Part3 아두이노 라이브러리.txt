@@ -1,0 +1,175 @@
+Part3. Arduino Library
+
+아두이노 라이브러리 사용방법
+
+서영배
+
+HardCopyWorld.com
+
+
+
+Contents
+
+01/  아두이노 라이브러리
+
+02/  라이브러리 사용방법
+
+03/  라이브러리 설치방법
+
+002
+
+
+
+03
+
+Arduino
+Library
+
+아두이노 라이브러리
+
+• 아두이노 라이브러리
+
+- 다양한 센서, 모터, 모듈을 쉽게 사용할 수 있도록 지원
+
+- 일반적으로 ZIP 압축 파일로 배포
+
+- 헤더 파일 include 한 뒤, 초기화 해서 사용
+
+- ex.
+
+#include <SoftwareSerial.h>
+
+SoftwareSerial mySerial(2, 3);
+
+• 라이브러리 폴더
+
+- 외부 라이브러리 : [C:\Program Files\Arduino\libraries]
+
+- 내부 라이브러리 (기본 라이브러리) :
+
+[C:\Program Files\Arduino\hardware\arduino\avr\libraries]
+
+003
+
+
+
+03
+
+Arduino
+Library
+
+라이브러리 사용 방법 (메뉴)
+
+• 스케치
+
+• 라이브러리 가져오기…
+
+•  원하는 라이브러리 선택
+
+• 소스 코드에서 확인
+
+#include <EEPROM.h>
+
+004
+
+
+
+03
+
+Arduino
+Library
+
+라이브러리 사용 방법 (직접 입력)
+
+•  Include 구문을 직접 입력
+
+#include <EEPROM.h>
+
+• 컴파일해서 확인
+
+005
+
+
+
+03
+
+Arduino
+Library
+
+라이브러리 설치 방법 (메뉴)
+
+• 스케치
+
+• 라이브러리 가져오기…
+
+• 라이브러리 추가…
+
+• 다운로드 받은
+
+•  아두이노 IDE 재실행
+
+• 메뉴에서 확인
+
+006
+
+
+
+03
+
+Arduino
+Library
+
+라이브러리 설치 방법 (직접 설치)
+
+• 설치 폴더로 이동
+
+- [C:\Program Files\Arduino\libraries]
+
+- ZIP 파일 압축 해제
+
+- 아두이노 IDE 재실행
+
+- 메뉴에서 설치여부 확인
+
+- 헤더 파일 include 한 뒤, 초기화 해서 사용
+
+- ex. ArduinoTest 라이브러리
+
+libraries\ArduinoTest (폴더)
+
+libraries\ArduinoTest\ArduinoTest.cpp
+libraries\ArduinoTest\ArduinoTest.h
+
+libraries\ArduinoTest\examples (폴더)
+
+- 사용 예
+
+#include <ArduinoTest.h>
+
+007
+
+
+수고하셨습니다!!
+
+HardCopyWorld.com 서영배
+
+
+HardCopyWorld.com
+
+
+제작/
+사용범위/
+
+서영배
+
+본 문서는 비상업적 목적에 한해 사용, 배포가 가능합니다.
+배포시에는 원본 문서를 확인할 수 있도록 본 페이지의
+내용을 반드시 포함해야 합니다.
+
+홈페이지 http://www.hardcopyworld.com
+
+이메일 godstale@hotmail.com
+
+HardCopyWorld.com 을 통해 본 연재 강좌의 전체 내용
+및 다양한 모듈 정보, 소스를 얻으실 수 있습니다.
+

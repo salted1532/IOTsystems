@@ -1,0 +1,42 @@
+8x8 LED Matrix
+
+8x8 LED Matrix- LED 배열 구조 
+
+세로 0~7
+가로 0~7
+
+Row, Column번호로 각 LED를 on/off 가능
+
+목표
+-LED 매트릭스의 다양한 동작 예제 실습
+
+준비물
+-LED Martrix 모듈, 연결선, 아두이노
+
+VCC - 5V
+GND - GND
+DIN - D12 ~마음대로
+CS - D10 ~마음대로
+CLK - D11 ~마음대로
+
+12C 기준
+SDA -> A4
+SCL -> A5
+VCC -> 5V
+GND -> GND
+RST -> D9 (5pin 일 때)
+
+D1 -> D11 (MOSI) DC -> D8 (Data Command)
+D0 -> D13 (SCK) CS -> D10(Chip Select)
+
+RES - D9 (Reset)
+VCC -> 5V GND -> GND
+
+
+
+
+
+
+
+
+

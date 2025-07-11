@@ -1,0 +1,342 @@
+Part7. Analog IO
+
+아두이노 아날로그 핀 제어하기
+
+서영배
+
+HardCopyWorld.com
+
+
+
+Contents
+
+01/  아날로그 핀 제어
+
+02/  analogRead 예제
+
+03/  analogWrite – PWM 제어
+04/  analogWrite – PWM 예제
+05/  심화 학습
+
+002
+
+
+
+07
+
+Analog IO
+
+아날로그 핀 제어
+
+• 아날로그 핀
+
+- 아날로그 신호를 입력 받을 수 있음
+
+- 0~5V 를 1024 단계로 구분된 값으로 변환(10bit resolution)
+
+- ADC (Analog to Digital Converter)
+
+• 아날로그 핀 제어 방법
+
+- 초기화가 필요 없음 : input 모드만 가능
+
+- 아날로그 핀 입력 체크 : analogRead(pinNumber)
+
+입력된 전압에 따라 0~1023 사이의 값 출력
+
+A0 ~ A7 까지의 상수로 핀 지정
+
+• 아두이노 아날로그 핀 (input)
+
+- A0~A7 까지 8개 핀 제공 (UNO 기준)
+
+- A4, A5 핀은 I2C 핀으로 예약 (SDA, SCL)
+
+003
+
+
+07
+
+Analog IO
+
+analogRead 예제
+
+: 포텐셔미터
+
+004
+
+
+
+07
+
+Analog IO
+
+analogRead 예제
+
+• 포텐셔미터
+
+- 손잡이를 돌릴 때 마다 내부 저항이 바뀌는 장치
+
+- 출력핀으로 들어가는 전압이 변화됨 (0~5V)
+
+- 아날로그 핀으로 읽어서 입력 장치로 사용
+
+• 목표
+
+- 포텐셔미터를 돌리면 변화하는 analogRead 값을 PC에 출력
+
+• 준비물
+
+- 포텐셔미터, 연결선
+
+005
+
+
+
+07
+
+Analog IO
+
+analogRead 예제
+
+• 회로도
+
+- 포텐셔미터 양 끝 핀 → 5V, GND
+
+- 가운데 핀 → A0
+
+• 예제 파일
+
+- Part7_analogRead_potentiometer
+
+006
+
+
+
+07
+
+Analog IO
+
+analogRead 예제
+
+
+Serial 통신 초기화
+
+아날로그 값 읽기
+값 출력
+
+// the setup routine runs once when you press reset:
+void setup() {
+
+// initialize serial communication at 9600 bits per second:
+
+Serial.begin(9600);
+
+}
+
+// the loop routine runs over and over again forever:
+void loop() {
+
+// read the input on analog pin 0:
+
+int sensorValue = analogRead(A0);
+
+// print out the value you read:
+
+Serial.println(sensorValue);
+
+delay(100);  // delay in between reads for stability
+
+}
+
+007
+
+
+
+07
+
+Analog IO
+
+심화 학습
+
+• 포텐셔미터 회전 방향과 출력값
+
+- 포텐셔미터의 5V, GND 핀을 서로 바꿔서 변화를 관찰
+
+
+07
+
+Analog IO
+
+AnalogWrite - PWM 제어
+
+009
+
+
+
+07
+
+Analog IO
+
+PWM 제어
+
+• PWM – 출력 전압 조절
+
+- LED 밝기를 조절하려면? --> 출력 전압을 조절
+
+- 아두이노는 출력 전압 자체를 조절하는 능력이 없다
+
+- 그래서 PWM 사용 (Pulse Width Modulation, 펄스 폭 변조)
+
+• PWM
+
+- 5V 출력을 계속 유지하는 것이 아니라 on/off 를 빠르게 반복
+
+- on/off 간격(pulse width)에 따라 평균전압이 낮아지는 효과
+
+0010
+
+
+
+07
+
+Analog IO
+
+PWM 제어
+
+• 아두이노 PWM
+
+- 아두이노에서는 500Hz 주파수, 2ms 간격으로 이런 작업을 수행
+
+- 256 단계로 구분해서 출력이 가능 (0~255, 8bit)
+
+- analogWrite() 함수 사용 (아날로그 출력)
+
+• PWM 핀
+
+- 아날로그 핀이 아니라 디지털 핀 사용!! (3, 5, 6, 9, 10, 11)
+
+0011
+
+
+07
+
+Analog IO
+
+AnalogWrite - PWM 예제
+
+: LED fade
+
+0012
+
+
+
+07
+
+Analog IO
+
+AnalogWrite - PWM 예제
+
+• LED fade
+
+- LED의 밝기를 변화
+
+• 목표
+
+- 포텐셔미터로 LED를 밝기를 조절한다
+
+• 준비물
+
+- 포텐셔미터 예제대로 연결된 상태
+
+- LED, 1 KOhm 저항, 연결선
+
+0013
+
+
+
+07
+
+Analog IO
+
+AnalogWrite - PWM 예제
+
+• 회로도
+
+• 예제 파일
+
+- Part7_analogWrite_LED_fade
+
+0014
+
+
+
+07
+
+Analog IO
+
+AnalogWrite - PWM 예제
+
+
+LED 핀 초기화
+
+void setup() {
+
+// put your setup code here, to run once:
+
+//pinMode(3, OUTPUT);
+
+}
+
+
+PWM 출력
+밝기(PWM 출력) 변화
+
+void loop() {
+
+// put your main code here, to run repeatedly:
+int sensorValue = analogRead(A0);
+analogWrite(3, sensorValue / 4);
+delay(50);
+
+}
+
+0015
+
+
+
+07
+
+Analog IO
+
+심화 학습
+
+• RGB LED
+
+- RGB LED 동작 원리를 유추해보자
+
+
+수고하셨습니다!!
+
+HardCopyWorld.com 서영배
+
+
+HardCopyWorld.com
+
+
+제작/
+사용범위/
+
+서영배
+
+본 문서는 비상업적 목적에 한해 사용, 배포가 가능합니다.
+배포시에는 원본 문서를 확인할 수 있도록 본 페이지의
+내용을 반드시 포함해야 합니다.
+
+홈페이지 http://www.hardcopyworld.com
+
+이메일 godstale@hotmail.com
+
+HardCopyWorld.com 을 통해 본 연재 강좌의 전체 내용
+및 다양한 모듈 정보, 소스를 얻으실 수 있습니다.
+
